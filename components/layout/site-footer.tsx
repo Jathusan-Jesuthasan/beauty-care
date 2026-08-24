@@ -1,7 +1,18 @@
-import { ArrowUpRight, MessageCircle, Phone } from 'lucide-react'
+import {
+  ArrowUpRight,
+  Camera,
+  MessageCircle,
+  PhoneCall,
+} from 'lucide-react'
 import { SiteLogo } from './site-logo'
 import { FacebookIcon } from '@/components/icons/facebook-icon'
-import { SALON_EMAIL, SALON_FACEBOOK_URL, SALON_NAME, SALON_PHONE } from '@/lib/constants/site'
+import {
+  SALON_EMAIL,
+  SALON_FACEBOOK_URL,
+  SALON_INSTAGRAM_URL,
+  SALON_NAME,
+  SALON_PHONE,
+} from '@/lib/constants/site'
 
 const FOOTER_NAV_LINKS = ['home', 'about', 'services', 'bridal', 'gallery', 'locations', 'contact'] as const
 const LOCATION_LINKS = [
@@ -61,7 +72,7 @@ export function SiteFooter() {
             <h4 className="footer-heading">Contact & Booking</h4>
             <div className="footer-contact-items">
               <a href={callHref} className="footer-contact-link">
-                <Phone size={15} aria-hidden="true" />
+                <PhoneCall size={15} aria-hidden="true" />
                 <span>{SALON_PHONE}</span>
               </a>
               <a
@@ -83,6 +94,17 @@ export function SiteFooter() {
               >
                 <FacebookIcon size={15} className="facebook-icon" />
                 <span>Facebook Page</span>
+                <ArrowUpRight size={12} aria-hidden="true" />
+              </a>
+              <a
+                className="footer-contact-link footer-instagram-link"
+                href={SALON_INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Dee's Hair, Beauty & Bridal Salon on Instagram"
+              >
+                <Camera size={15} />
+                <span>Instagram</span>
                 <ArrowUpRight size={12} aria-hidden="true" />
               </a>
             </div>

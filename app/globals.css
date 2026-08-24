@@ -88,12 +88,12 @@ button { font: inherit; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 44px;
+  gap: 10px;
+  min-height: 46px;
   padding: 12px 24px;
   border: 1px solid var(--color-brand);
   background: var(--color-brand);
-  color: #ffffff;
+  color: #ffffff !important;
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 700;
@@ -102,33 +102,69 @@ button { font: inherit; }
   border-radius: var(--radius-sm);
   transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-smooth), box-shadow var(--transition-smooth);
   cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(229, 0, 125, 0.25);
+  position: relative;
 }
 .button:hover {
   background: var(--color-brand-hover);
   border-color: var(--color-brand-hover);
-  color: #ffffff;
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(229, 0, 125, 0.28);
+  box-shadow: 0 8px 24px rgba(229, 0, 125, 0.4);
 }
 .button-light {
-  background: var(--color-bg-primary);
-  border-color: var(--color-bg-primary);
-  color: var(--color-charcoal);
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--color-charcoal) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 .button-light:hover {
-  background: transparent;
-  color: var(--color-bg-primary);
-  border-color: var(--color-bg-primary);
-  box-shadow: none;
+  background: var(--color-bg-primary);
+  color: var(--color-brand) !important;
+  border-color: var(--color-brand);
+  box-shadow: 0 6px 18px rgba(229, 0, 125, 0.18);
+  transform: translateY(-2px);
 }
 .button-outline {
-  background: transparent;
-  border-color: var(--color-border-dark);
-  color: var(--color-text-on-dark);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(232, 231, 234, 0.22);
+  color: var(--color-text-on-dark) !important;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
 }
 .button-outline:hover {
   border-color: var(--color-brand);
-  color: var(--color-brand);
+  color: var(--color-brand) !important;
+  background: rgba(229, 0, 125, 0.08);
+  box-shadow: 0 6px 18px rgba(229, 0, 125, 0.15);
+  transform: translateY(-2px);
+}
+.button-whatsapp {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(229, 0, 125, 0.35);
+}
+.button-whatsapp:hover {
+  background: var(--color-brand-hover);
+  border-color: var(--color-brand-hover);
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(229, 0, 125, 0.5);
+  transform: translateY(-2px);
+}
+.button-facebook {
+  background: rgba(24, 119, 242, 0.12);
+  border: 1px solid rgba(24, 119, 242, 0.35);
+  color: #ffffff !important;
+  box-shadow: none;
+}
+.button-facebook:hover {
+  background: #1877F2;
+  border-color: #1877F2;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.35);
+  transform: translateY(-2px);
 }
 .menu-button { display: none; width: 44px; height: 44px; border: 0; background: none; color: var(--color-text-on-dark); cursor: pointer; }
 

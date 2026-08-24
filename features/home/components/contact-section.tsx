@@ -1,7 +1,17 @@
-import { ArrowUpRight, MessageCircle, Phone } from 'lucide-react'
+import {
+  ArrowUpRight,
+  Camera,
+  MessageCircle,
+  PhoneCall,
+} from 'lucide-react'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { FacebookIcon } from '@/components/icons/facebook-icon'
-import { SALON_EMAIL, SALON_FACEBOOK_URL, SALON_PHONE } from '@/lib/constants/site'
+import {
+  SALON_EMAIL,
+  SALON_FACEBOOK_URL,
+  SALON_INSTAGRAM_URL,
+  SALON_PHONE,
+} from '@/lib/constants/site'
 
 export function ContactSection() {
   const callHref = `tel:${SALON_PHONE.replaceAll(' ', '')}`
@@ -17,7 +27,7 @@ export function ContactSection() {
       />
       <div className="contact-details">
         <a href={callHref}>
-          <Phone size={18} />
+          <PhoneCall size={18} />
           <span>
             <small>Call us</small>
             {SALON_PHONE}
@@ -37,6 +47,13 @@ export function ContactSection() {
             Dee&apos;s Salon Facebook Page
           </span>
         </a>
+        <a href={SALON_INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+          <Camera size={18} style={{ color: '#E1306C' }} />
+          <span>
+            <small>Instagram</small>
+            Dee&apos;s Salon Instagram
+          </span>
+        </a>
         <a href={`mailto:${SALON_EMAIL}`}>
           <span className="contact-symbol">@</span>
           <span>
@@ -46,10 +63,10 @@ export function ContactSection() {
         </a>
         <div className="contact-actions">
           <a className="button button-light" href={callHref}>
-            Call now <Phone size={15} />
+            Call now <PhoneCall size={15} />
           </a>
           <a
-            className="button button-outline"
+            className="button button-whatsapp"
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
@@ -57,14 +74,22 @@ export function ContactSection() {
             WhatsApp us <MessageCircle size={15} />
           </a>
           <a
-            className="button button-outline"
+            className="button button-facebook"
             href={SALON_FACEBOOK_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Facebook <FacebookIcon size={15} style={{ color: '#1877F2' }} />
+            Facebook <FacebookIcon size={15} />
           </a>
-          <a className="text-link light-link" href={`mailto:${SALON_EMAIL}`}>
+          <a
+            className="button button-outline"
+            href={SALON_INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram <Camera size={15} />
+          </a>
+          <a className="button button-outline" href={`mailto:${SALON_EMAIL}`}>
             Email us <ArrowUpRight size={15} />
           </a>
         </div>

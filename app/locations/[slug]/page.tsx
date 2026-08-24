@@ -83,23 +83,18 @@ export default async function LocationPage({ params }: LocationPageProps) {
           <a className="button" href={`mailto:${email}?subject=Book at ${location.name}`}>Book appointment <ArrowUpRight size={15} /></a>
         </div>
       </section>
-      {location.mapEmbedUrl && (
-        <section className="location-map-section" style={{ marginTop: '60px' }}>
-          <span className="eyebrow" style={{ color: 'var(--color-brand)' }}>Interactive Location Map</span>
-          <div style={{ marginTop: '16px', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--color-border-dark)', minHeight: '380px' }}>
-            <iframe
-              src={location.mapEmbedUrl}
-              width="100%"
-              height="380"
-              style={{ border: 0, display: 'block' }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-              title={`Google Map for ${location.name}`}
-            />
-          </div>
-        </section>
-      )}
+      <section className="location-map-section" style={{ marginTop: '60px' }}>
+        <span className="eyebrow" style={{ color: 'var(--color-brand)' }}>Location details</span>
+        <div style={{ marginTop: '16px', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--color-border-dark)', minHeight: '140px', padding: '24px 20px', display: 'grid', gap: '10px', background: 'var(--color-surface)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 700 }}><MapPin size={18} /> {location.name}</div>
+          <p style={{ margin: 0 }}>{location.address}</p>
+          {location.googleMapsUrl && (
+            <a className="text-link" href={location.googleMapsUrl} target="_blank" rel="noopener noreferrer">
+              Open in Google Maps <ArrowUpRight size={15} />
+            </a>
+          )}
+        </div>
+      </section>
     </main>
   )
 }

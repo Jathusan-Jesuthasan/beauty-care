@@ -29,7 +29,13 @@ export const SALON_PHONE = '070 387 7877'
 export const SALON_EMAIL = 'deeshairbeautybridal@gmail.com'
 
 /**
- * Facebook page URL. Used in the site footer social link.
+ * Facebook page URL. Used in the site footer and contact social links.
  */
 export const SALON_FACEBOOK_URL =
-  'https://www.facebook.com/DeesHairbeautyBridalSalon/photos'
+  'https://www.facebook.com/DeesHairbeautyBridalSalon'
+
+/**
+ * Instagram profile URL. Used in the site footer and contact social links.
+ */
+export const SALON_INSTAGRAM_URL =
+  'https://www.instagram.com/dees_hairbeauty_salons'
