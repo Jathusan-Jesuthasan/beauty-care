@@ -8,6 +8,7 @@ import { BridalJourney } from '@/features/bridal/components/bridal-journey'
 import { TransformationSection } from '@/features/transformations/components/transformation-section'
 
 import { HeroSection } from '@/features/home/components/hero-section'
+import { TrustSection } from '@/features/home/components/trust-section'
 import { ServicesSection } from '@/features/home/components/services-section'
 import { AboutSection } from '@/features/home/components/about-section'
 import { BridalSection } from '@/features/bridal/components/bridal-section'
@@ -54,6 +55,7 @@ export default function Home() {
       <SiteHeader />
       <main>
         <HeroSection />
+        <TrustSection />
         <IntentFinder />
         <ServicesSection />
         <TransformationSection />

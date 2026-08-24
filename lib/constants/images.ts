@@ -10,8 +10,11 @@
  * provided.
  */
 
-/** Hero section — primary above-the-fold image (LCP element). */
+/** Hero section — 3 primary images. */
 export const HERO_IMAGE_URL = '/images/hero/hero-bridal-makeup.jpg'
+export const HERO_BRIDAL_IMAGE_URL = '/images/hero/hero-bridal-makeup.jpg'
+export const HERO_PRODUCTS_IMAGE_URL = '/images/hero/hero-hair-care-products.jpeg'
+export const HERO_SERVICE_IMAGE_URL = '/images/hero/hero-service.jpeg'
 
 /** Bridal section and bridal service card. */
 export const BRIDAL_IMAGE_URL = '/images/bridal/bridal-party-makeup.jpeg'

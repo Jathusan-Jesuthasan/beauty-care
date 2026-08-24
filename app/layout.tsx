@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import { Manrope, Playfair_Display } from 'next/font/google'
 import './globals.css'
 
-const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' })
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope', display: 'swap' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair', display: 'swap' })
 
 export const metadata: Metadata = {
   title: "Dee's Hair, Beauty & Bridal Salon",

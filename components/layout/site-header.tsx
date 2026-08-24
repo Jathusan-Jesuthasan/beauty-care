@@ -21,6 +21,7 @@ const NAV_LINKS: NavLink[] = [
   ['Services', 'services'],
   ['Bridal', 'bridal'],
   ['Gallery', 'gallery'],
+  ['Locations', 'locations'],
   ['Contact', 'contact'],
 ]
 
@@ -153,7 +154,7 @@ export function SiteHeader() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <header className={`nav${scrolled ? ' scrolled' : ''}`}>
+    <header className={`nav${scrolled ? ' scrolled' : ''}${open ? ' menu-is-open' : ''}`}>
       <SiteLogo />
 
       <nav

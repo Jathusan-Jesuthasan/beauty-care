@@ -1,20 +1,18 @@
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, MessageCircle } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { SALON_EMAIL } from '@/lib/constants/site'
 import { BRIDAL_IMAGE_URL } from '@/lib/constants/images'
 
 export function BridalSection() {
+  const bridalWhatsappHref = `https://wa.me/94703877877?text=${encodeURIComponent("Hello Dee's Salon, I would like to inquire about your Bridal hair & makeup services.")}`
+
   return (
     <section id="bridal" className="bridal">
-      {/*
-       * Animation contract: `.bridal-image` and `.bridal-copy` are targeted
-       * by cinematic-scroll.tsx (currently inactive). Do not rename.
-       */}
       <div className="bridal-image">
         <Image
           src={BRIDAL_IMAGE_URL}
-          alt="Bridal party makeup preparation"
+          alt="Bridal party makeup preparation at Dee's Salon"
           fill
           sizes="(max-width: 760px) 100vw, 50vw"
         />
@@ -23,15 +21,25 @@ export function BridalSection() {
         <SectionHeading
           light
           label="The bridal experience"
-          title="Your most beautiful day deserves the very best."
-          copy="From bridal hair and makeup to complete beauty preparation, let Dee's help you look and feel unforgettable."
+          title="Your special day, beautifully yours."
+          copy="From bridal hair and makeup to complete beauty preparation, let Dee's help you look and feel unforgettable on your most special day."
         />
-        <a
-          className="button button-light"
-          href={`mailto:${SALON_EMAIL}?subject=Plan my bridal look`}
-        >
-          Plan your bridal look <ArrowUpRight size={15} />
-        </a>
+        <div className="bridal-actions">
+          <a
+            className="button button-light"
+            href={`mailto:${SALON_EMAIL}?subject=Plan my bridal look`}
+          >
+            Plan your bridal look <ArrowUpRight size={15} />
+          </a>
+          <a
+            className="button button-outline"
+            href={bridalWhatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp bridal team <MessageCircle size={15} />
+          </a>
+        </div>
       </div>
     </section>
   )

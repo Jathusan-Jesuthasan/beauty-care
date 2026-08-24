@@ -1,63 +1,99 @@
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, MessageCircle, Phone } from 'lucide-react'
 import { SiteLogo } from './site-logo'
-import { SALON_EMAIL, SALON_FACEBOOK_URL, SALON_NAME } from '@/lib/constants/site'
+import { FacebookIcon } from '@/components/icons/facebook-icon'
+import { SALON_EMAIL, SALON_FACEBOOK_URL, SALON_NAME, SALON_PHONE } from '@/lib/constants/site'
 
-/**
- * The ordered list of section anchor IDs rendered in the footer nav.
- * Labels are derived by capitalising the first character of each ID.
- */
-const FOOTER_NAV_LINKS = ['about', 'services', 'bridal', 'gallery', 'contact'] as const
+const FOOTER_NAV_LINKS = ['home', 'about', 'services', 'bridal', 'gallery', 'locations', 'contact'] as const
+const LOCATION_LINKS = [
+  ['Thalawathugoda', '/locations/thalawathugoda'],
+  ['Piliyandala', '/locations/piliyandala'],
+  ['Biyagama', '/locations/biyagama'],
+  ['Colombo 07', '/locations/colombo-07'],
+  ['Battaramulla', '/locations/battaramulla'],
+] as const
 
-/**
- * SiteFooter
- *
- * The site-wide footer. Renders the brand logo, tagline, navigation links,
- * a Facebook social link, and a copyright line with the contact email.
- *
- * This is a Server Component — no state or browser APIs are required.
- *
- * Layout (two rows):
- * - `.footer-top`    — logo, tagline, nav links, Facebook link
- * - `.footer-bottom` — copyright string and email address
- *
- * Animation contract:
- * - `.footer` — no animations. Do not rename.
- * - `.footer-social` — CSS hover only (opacity fade + translateY).
- * - `.footer-top`, `.footer-bottom` — layout only.
- */
 export function SiteFooter() {
+  const callHref = `tel:${SALON_PHONE.replaceAll(' ', '')}`
+  const whatsappHref = `https://wa.me/94703877877?text=${encodeURIComponent("Hello Dee's Salon, I would like to inquire about booking an appointment.")}`
+
   return (
     <footer className="footer">
-      {/* Top row: brand, tagline, navigation, social */}
-      <div className="footer-top">
-        <SiteLogo light />
+      <div className="footer-container">
+        {/* Top row: brand, tagline, nav, branches, contact */}
+        <div className="footer-grid">
+          {/* Col 1: Brand & Statement */}
+          <div className="footer-col footer-brand-col">
+            <SiteLogo light />
+            <p className="footer-tagline">
+              Hair · Beauty · Bridal Salon
+            </p>
+            <p className="footer-statement">
+              Personalised hair, beauty and bridal services tailored around your style, occasion and confidence.
+            </p>
+          </div>
 
-        <p>Hair · Beauty · Bridal Salon</p>
+          {/* Col 2: Navigation */}
+          <div className="footer-col">
+            <h4 className="footer-heading">Explore</h4>
+            <nav className="footer-links" aria-label="Footer navigation">
+              {FOOTER_NAV_LINKS.map((sectionId) => (
+                <a key={sectionId} href={`/#${sectionId}`}>
+                  {sectionId[0].toUpperCase() + sectionId.slice(1)}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-        <nav aria-label="Footer navigation">
-          {FOOTER_NAV_LINKS.map((sectionId) => (
-            <a key={sectionId} href={`#${sectionId}`}>
-              {sectionId[0].toUpperCase() + sectionId.slice(1)}
-            </a>
-          ))}
-        </nav>
+          {/* Col 3: Branches */}
+          <div className="footer-col">
+            <h4 className="footer-heading">Branches</h4>
+            <nav className="footer-links" aria-label="Salon location branches">
+              {LOCATION_LINKS.map(([name, url]) => (
+                <a key={name} href={url}>
+                  {name}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-        <a
-          className="footer-social"
-          href={SALON_FACEBOOK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View Dee's Hair, Beauty & Bridal Salon on Facebook"
-        >
-          <span aria-hidden="true">f</span> Facebook
-          <ArrowUpRight size={13} aria-hidden="true" />
-        </a>
-      </div>
+          {/* Col 4: Quick Contact */}
+          <div className="footer-col footer-contact-col">
+            <h4 className="footer-heading">Contact & Booking</h4>
+            <div className="footer-contact-items">
+              <a href={callHref} className="footer-contact-link">
+                <Phone size={15} aria-hidden="true" />
+                <span>{SALON_PHONE}</span>
+              </a>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-contact-link footer-whatsapp-link"
+              >
+                <MessageCircle size={15} aria-hidden="true" className="whatsapp-icon" />
+                <span>WhatsApp Us</span>
+                <ArrowUpRight size={12} aria-hidden="true" />
+              </a>
+              <a
+                className="footer-contact-link footer-facebook-link"
+                href={SALON_FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View Dee's Hair, Beauty & Bridal Salon on Facebook"
+              >
+                <FacebookIcon size={15} className="facebook-icon" />
+                <span>Facebook Page</span>
+                <ArrowUpRight size={12} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </div>
 
-      {/* Bottom row: copyright and contact email */}
-      <div className="footer-bottom">
-        <span>© 2026 {SALON_NAME}. All rights reserved.</span>
-        <a href={`mailto:${SALON_EMAIL}`}>{SALON_EMAIL}</a>
+        {/* Bottom row: copyright and contact email */}
+        <div className="footer-bottom">
+          <span>© 2026 {SALON_NAME}. All rights reserved.</span>
+          <a href={`mailto:${SALON_EMAIL}`}>{SALON_EMAIL}</a>
+        </div>
       </div>
     </footer>
   )

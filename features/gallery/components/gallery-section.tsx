@@ -1,15 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, ArrowUpRight, X } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { galleryImages } from '../data/gallery-images'
 
 export function GallerySection() {
   const [filter, setFilter] = useState('All')
   const [selected, setSelected] = useState<string | null>(null)
+  const touchStartXRef = useRef<number | null>(null)
 
   const filtered = galleryImages.filter(
     ([category]) => filter === 'All' || category === filter,
@@ -20,63 +21,84 @@ export function GallerySection() {
     : -1
 
   function move(direction: number) {
-    setSelected(
-      galleryImages[(selectedIndex + direction + galleryImages.length) % galleryImages.length][1],
-    )
+    if (selectedIndex === -1) return
+    const nextIndex =
+      (selectedIndex + direction + galleryImages.length) % galleryImages.length
+    setSelected(galleryImages[nextIndex][1])
   }
 
+  // ── Lightbox Scroll Lock, Focus Trap & Keyboard Navigation ─────────────
   useEffect(() => {
     if (!selected) {
-      // Focus restoration: focus the button that opened the lightbox
-      const button = document.querySelector(`button[aria-label="View ${filtered.find(f => f[1] === selected)?.[0]} gallery image"]`) as HTMLButtonElement
-      if (button) button.focus()
+      document.body.style.overflow = ''
+      document.body.classList.remove('lightbox-open')
       return
     }
 
-    const lightbox = document.querySelector('.lightbox') as HTMLElement
-    const focusableElements = lightbox?.querySelectorAll('button')
-    const firstElement = focusableElements?.[0] as HTMLElement
-    const lastElement = focusableElements?.[focusableElements.length - 1] as HTMLElement
+    // Lock page scroll completely
+    document.body.style.overflow = 'hidden'
+    document.body.classList.add('lightbox-open')
 
-    // Focus the first element (close button) when lightbox opens
+    const lightbox = document.querySelector('.lightbox-modal') as HTMLElement
+    const focusableElements = lightbox?.querySelectorAll<HTMLButtonElement>('button')
+    const firstElement = focusableElements?.[0]
+    const lastElement = focusableElements?.[focusableElements.length - 1]
+
     firstElement?.focus()
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') setSelected(null)
-      if (event.key === 'ArrowLeft') move(-1)
-      if (event.key === 'ArrowRight') move(1)
-
-      // Focus trap
-      if (event.key === 'Tab') {
-        if (event.shiftKey) {
-          if (document.activeElement === firstElement) {
-            lastElement?.focus()
-            event.preventDefault()
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            firstElement?.focus()
-            event.preventDefault()
-          }
+      if (event.key === 'Escape') {
+        setSelected(null)
+      } else if (event.key === 'ArrowLeft') {
+        move(-1)
+      } else if (event.key === 'ArrowRight') {
+        move(1)
+      } else if (event.key === 'Tab') {
+        if (event.shiftKey && document.activeElement === firstElement) {
+          lastElement?.focus()
+          event.preventDefault()
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          firstElement?.focus()
+          event.preventDefault()
         }
       }
     }
 
-    document.body.classList.add('lightbox-open')
     document.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      document.body.style.overflow = ''
       document.body.classList.remove('lightbox-open')
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [selected, selectedIndex, filtered])
+  }, [selected, selectedIndex])
+
+  // ── Touch Swipe Handlers for Mobile ────────────────────────────────────
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartXRef.current = e.touches[0].clientX
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartXRef.current === null) return
+    const diffX = touchStartXRef.current - e.changedTouches[0].clientX
+    touchStartXRef.current = null
+
+    if (Math.abs(diffX) > 40) {
+      if (diffX > 0) move(1) // Swipe left -> next
+      else move(-1) // Swipe right -> prev
+    }
+  }
+
+  const currentImageInfo = selected
+    ? galleryImages.find(([, src]) => src === selected)
+    : null
 
   return (
     <section id="gallery" className="section gallery">
       <SectionHeading
         label="A little inspiration"
         title="The Dee's edit."
-        copy="A glimpse of hair, beauty, bridal and reference moments. Replace temporary images with the salon's own work when ready."
+        copy="A glimpse of hair, beauty, bridal and reference moments crafted at Dee's Salon."
       />
 
       {/* Category filter tabs */}
@@ -96,7 +118,7 @@ export function GallerySection() {
         )}
       </div>
 
-      {/* Gallery grid — Framer Motion layout animation on filter change */}
+      {/* Gallery grid */}
       <div className="gallery-grid">
         {filtered.map(([category, src, altText]) => (
           <motion.button
@@ -105,7 +127,7 @@ export function GallerySection() {
             className="gallery-item"
             style={{ position: 'relative' }}
             onClick={() => setSelected(src)}
-            aria-label={`View ${category} gallery image`}
+            aria-label={`View ${category} gallery image: ${altText}`}
           >
             <Image
               src={src}
@@ -121,56 +143,82 @@ export function GallerySection() {
         ))}
       </div>
 
-      {/* Lightbox overlay */}
+      {/* Full-screen Lightbox Modal */}
       <AnimatePresence>
         {selected && (
           <motion.div
-            className="lightbox"
+            className="lightbox-modal"
             role="dialog"
             aria-modal="true"
-            aria-label="Selected gallery image"
+            aria-label="Selected gallery image viewer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             onClick={() => setSelected(null)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
+            {/* Close Button */}
             <button
-              className="lightbox-close"
-              aria-label="Close image"
+              className="lightbox-btn lightbox-close-btn"
+              aria-label="Close image lightbox"
               onClick={() => setSelected(null)}
             >
-              <X />
+              <X size={20} />
             </button>
+
+            {/* Previous Button */}
             <button
-              className="lightbox-prev"
+              className="lightbox-btn lightbox-nav-btn lightbox-prev-btn"
               aria-label="Previous image"
               onClick={(event) => {
                 event.stopPropagation()
                 move(-1)
               }}
             >
-              <ArrowLeft />
+              <ChevronLeft size={24} />
             </button>
-            <Image
-              src={selected}
-              alt="Selected salon work"
-              fill
-              sizes="100vw"
+
+            {/* Center Image Container */}
+            <div
+              className="lightbox-content-frame"
               onClick={(event) => event.stopPropagation()}
-            />
+            >
+              <div className="lightbox-image-wrapper">
+                <Image
+                  src={selected}
+                  alt={currentImageInfo ? currentImageInfo[2] : 'Selected salon work'}
+                  fill
+                  priority
+                  className="lightbox-active-image"
+                  sizes="(max-width: 768px) 95vw, 85vw"
+                />
+              </div>
+
+              {/* Caption & Counter Bar */}
+              <div className="lightbox-caption-bar">
+                <span className="lightbox-category-tag">
+                  {currentImageInfo ? currentImageInfo[0] : 'Gallery'}
+                </span>
+                <span className="lightbox-counter-text" aria-live="polite">
+                  {String(selectedIndex + 1).padStart(2, '0')} /{' '}
+                  {String(galleryImages.length).padStart(2, '0')}
+                </span>
+              </div>
+            </div>
+
+            {/* Next Button */}
             <button
-              className="lightbox-next"
+              className="lightbox-btn lightbox-nav-btn lightbox-next-btn"
               aria-label="Next image"
               onClick={(event) => {
                 event.stopPropagation()
                 move(1)
               }}
             >
-              <ArrowRight />
+              <ChevronRight size={24} />
             </button>
-            <span className="lightbox-count" aria-live="polite">
-              {selectedIndex + 1} / {galleryImages.length}
-            </span>
           </motion.div>
         )}
       </AnimatePresence>

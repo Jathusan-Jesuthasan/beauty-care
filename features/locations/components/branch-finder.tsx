@@ -155,18 +155,33 @@ export function BranchFinder() {
 
         {/* Selected location detail panel */}
         <div className="branch-detail">
-          {/* Visual map placeholder with location name */}
+          {/* Interactive Google Maps Embed */}
           <div
             className="branch-visual"
-            aria-label={`Selected location: ${selectedLocation.name}`}
+            aria-label={`Selected location map: ${selectedLocation.name}`}
           >
-            <MapPin size={22} />
-            <span>{getBranchLabel(selectedLocation.name)}</span>
-            <small>
-              Dee&apos;s Hair, Beauty &amp; Bridal Salon
-              <br />
-              Sri Lanka
-            </small>
+            {selectedLocation.mapEmbedUrl ? (
+              <iframe
+                src={selectedLocation.mapEmbedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: '340px', width: '100%', height: '100%' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title={`Google Map for ${selectedLocation.name}`}
+              />
+            ) : (
+              <>
+                <MapPin size={22} />
+                <span>{getBranchLabel(selectedLocation.name)}</span>
+                <small>
+                  Dee&apos;s Hair, Beauty &amp; Bridal Salon
+                  <br />
+                  Sri Lanka
+                </small>
+              </>
+            )}
           </div>
 
           {/* Location details */}

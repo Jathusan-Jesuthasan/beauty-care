@@ -12,6 +12,7 @@ export interface Location {
   reviewCount?: number
   googleMapsUrl?: string
   googleReviewsUrl?: string
+  mapEmbedUrl?: string
   openingHours: OpeningHours
   coordinates?: { latitude: number; longitude: number }
   mapUrl?: string

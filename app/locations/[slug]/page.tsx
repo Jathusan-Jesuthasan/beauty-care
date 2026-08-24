@@ -83,6 +83,23 @@ export default async function LocationPage({ params }: LocationPageProps) {
           <a className="button" href={`mailto:${email}?subject=Book at ${location.name}`}>Book appointment <ArrowUpRight size={15} /></a>
         </div>
       </section>
+      {location.mapEmbedUrl && (
+        <section className="location-map-section" style={{ marginTop: '60px' }}>
+          <span className="eyebrow" style={{ color: 'var(--color-brand)' }}>Interactive Location Map</span>
+          <div style={{ marginTop: '16px', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--color-border-dark)', minHeight: '380px' }}>
+            <iframe
+              src={location.mapEmbedUrl}
+              width="100%"
+              height="380"
+              style={{ border: 0, display: 'block' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={`Google Map for ${location.name}`}
+            />
+          </div>
+        </section>
+      )}
     </main>
   )
 }
