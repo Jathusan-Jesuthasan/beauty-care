@@ -5,6 +5,7 @@ import {
   PhoneCall,
 } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/section-heading'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import { FacebookIcon } from '@/components/icons/facebook-icon'
 import {
   SALON_EMAIL,
@@ -19,13 +20,16 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="contact">
-      <SectionHeading
-        light
-        label="Start a conversation"
-        title="Ready for your next look?"
-        copy="Let's make it beautiful. Tell us what you have in mind and we'll help you find the right service."
-      />
-      <div className="contact-details">
+      <ScrollReveal variant="fade-up">
+        <SectionHeading
+          light
+          label="Start a conversation"
+          title="Ready for your next look?"
+          copy="Let's make it beautiful. Tell us what you have in mind and we'll help you find the right service."
+        />
+      </ScrollReveal>
+      <ScrollReveal delay={0.12}>
+        <div className="contact-details">
         <a href={callHref}>
           <PhoneCall size={18} />
           <span>
@@ -93,7 +97,8 @@ export function ContactSection() {
             Email us <ArrowUpRight size={15} />
           </a>
         </div>
-      </div>
+        </div>
+      </ScrollReveal>
     </section>
   )
 }

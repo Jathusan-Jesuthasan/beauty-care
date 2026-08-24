@@ -28,7 +28,7 @@ export function BridalJourney() {
         <div className="journey-timeline">
           {beautyJourney.map((step) => (
             <StaggerItem key={step.number}>
-              <article className="journey-step">
+              <article className="journey-step" tabIndex={0}>
                 <span>{step.number}</span>
                 <div>
                   <h3>{step.title}</h3>

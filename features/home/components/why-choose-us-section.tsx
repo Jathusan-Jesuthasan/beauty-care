@@ -1,4 +1,5 @@
 import { SectionHeading } from '@/components/ui/section-heading'
+import { StaggerGroup, StaggerItem } from '@/components/scroll-reveal'
 
 export function WhyChooseUsSection() {
   const differentiators = [
@@ -11,15 +12,17 @@ export function WhyChooseUsSection() {
   return (
     <section className="section why">
       <SectionHeading label="The Dee's difference" title="Beauty, with intention." />
-      <div className="why-grid">
+      <StaggerGroup className="why-grid">
         {differentiators.map(([number, title, copy]) => (
-          <article className="why-item" key={number}>
-            <span>{number}</span>
-            <h3>{title}</h3>
-            <p>{copy}</p>
-          </article>
+          <StaggerItem key={number}>
+            <article className="why-item">
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </article>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   )
 }

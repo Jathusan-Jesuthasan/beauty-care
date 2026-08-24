@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { BookingLink } from '@/components/ui/booking-link'
 import { ScrollReveal } from '@/components/scroll-reveal'
@@ -37,6 +37,27 @@ export function HeroSection() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const heroRef = useRef<HTMLElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  })
+  const heroCopyY = useTransform(
+    scrollYProgress,
+    [0, 0.75],
+    [0, shouldReduceMotion ? 0 : -20],
+  )
+  const heroCopyOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.75],
+    [1, shouldReduceMotion ? 1 : 0.9],
+  )
+  const heroImageScale = useTransform(
+    scrollYProgress,
+    [0, 0.75],
+    [1, shouldReduceMotion ? 1 : 1.03],
+  )
 
   // ── Seamless Auto-rotating Editorial Carousel (5.5s autoplay) ───────────
   useEffect(() => {
@@ -54,9 +75,9 @@ export function HeroSection() {
   const activeSlide = HERO_SLIDES[currentSlideIndex]
 
   return (
-    <section id="home" className="hero">
+    <motion.section ref={heroRef} id="home" className="hero">
       {/* Left Copy Panel */}
-      <div className="hero-copy">
+      <motion.div className="hero-copy" style={{ y: heroCopyY, opacity: heroCopyOpacity }}>
         <ScrollReveal>
           <span className="eyebrow">Dee&apos;s · Hair · Beauty · Bridal</span>
         </ScrollReveal>
@@ -88,7 +109,7 @@ export function HeroSection() {
         >
           Scroll to discover <span>↓</span>
         </a>
-      </div>
+      </motion.div>
 
       {/* Right Editorial Image Carousel Container with Seamless Crossfade */}
       <motion.div
@@ -98,7 +119,7 @@ export function HeroSection() {
         whileHover={{ scale: 1.015 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="hero-image-frame">
+        <motion.div className="hero-image-frame" style={{ scale: heroImageScale }}>
           {/* Pre-render all 3 slides stacked to guarantee ZERO blank gap during transitions */}
           {HERO_SLIDES.map((slide, index) => {
             const isActive = index === currentSlideIndex
@@ -131,7 +152,7 @@ export function HeroSection() {
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* Minimal Editorial Carousel Controls */}
         <div
@@ -163,6 +184,6 @@ export function HeroSection() {
           </div>
         </div>
       </motion.div>
-    </section>
+    </motion.section>
   )
 }

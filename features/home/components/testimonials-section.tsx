@@ -1,4 +1,5 @@
 import { SectionHeading } from '@/components/ui/section-heading'
+import { StaggerGroup, StaggerItem } from '@/components/scroll-reveal'
 
 export function TestimonialsSection() {
   const reviews = [
@@ -10,18 +11,20 @@ export function TestimonialsSection() {
   return (
     <section className="section testimonials">
       <SectionHeading label="Kind words" title="A beautiful feeling, shared." />
-      <div className="testimonial-grid">
+      <StaggerGroup className="testimonial-grid">
         {reviews.map(([quote, name, note]) => (
-          <article className="testimonial" key={quote}>
-            <span className="quote-mark">&ldquo;</span>
-            <p>{quote}</p>
-            <footer>
-              {name}
-              <small>{note}</small>
-            </footer>
-          </article>
+          <StaggerItem key={quote}>
+            <article className="testimonial">
+              <span className="quote-mark">&ldquo;</span>
+              <p>{quote}</p>
+              <footer>
+                {name}
+                <small>{note}</small>
+              </footer>
+            </article>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerGroup>
     </section>
   )
 }

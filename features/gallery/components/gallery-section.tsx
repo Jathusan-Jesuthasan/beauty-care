@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { galleryImages } from '../data/gallery-images'
@@ -11,6 +11,7 @@ export function GallerySection() {
   const [filter, setFilter] = useState('All')
   const [selected, setSelected] = useState<string | null>(null)
   const touchStartXRef = useRef<number | null>(null)
+  const shouldReduceMotion = useReducedMotion()
 
   const filtered = galleryImages.filter(
     ([category]) => filter === 'All' || category === filter,
@@ -120,12 +121,16 @@ export function GallerySection() {
 
       {/* Gallery grid */}
       <div className="gallery-grid">
-        {filtered.map(([category, src, altText]) => (
+        {filtered.map(([category, src, altText], index) => (
           <motion.button
             layout
             key={src}
             className="gallery-item"
             style={{ position: 'relative' }}
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.04 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.55, delay: shouldReduceMotion ? 0 : index * 0.08, ease: [0.22, 1, 0.36, 1] }}
             onClick={() => setSelected(src)}
             aria-label={`View ${category} gallery image: ${altText}`}
           >

@@ -1,6 +1,7 @@
 import { transformations } from '../data/transformations'
 import { BeforeAfterSlider } from './before-after-slider'
 import { SectionHeading } from '@/components/ui/section-heading'
+import { ScrollReveal } from '@/components/scroll-reveal'
 
 /**
  * TransformationSection
@@ -14,8 +15,7 @@ import { SectionHeading } from '@/components/ui/section-heading'
  * Layout: `.transformation-tabs` uses a 3-column grid on desktop.
  * On mobile, the grid collapses to a single column (see globals.css).
  *
- * Note: Current imagery is placeholder/reference. These will be replaced
- * with verified Dee's salon transformation photography.
+ * The comparison imagery is supplied as local salon photography.
  */
 export function TransformationSection() {
   return (
@@ -23,15 +23,17 @@ export function TransformationSection() {
       <SectionHeading
         label="Visual reference"
         title="The Dee's transformation."
-        copy="Explore the difference a considered beauty experience can make. These reference images are placeholders until the salon's own work is supplied."
+        copy="Explore the difference a considered beauty experience can make."
       />
 
       <div className="transformation-tabs">
-        {transformations.map((transformation) => (
-          <article key={transformation.id}>
-            <h3>{transformation.category}</h3>
-            <BeforeAfterSlider transformation={transformation} />
-          </article>
+        {transformations.map((transformation, index) => (
+          <ScrollReveal key={transformation.id} variant="scale" delay={index * 0.08}>
+            <article>
+              <h3>{transformation.category}</h3>
+              <BeforeAfterSlider transformation={transformation} />
+            </article>
+          </ScrollReveal>
         ))}
       </div>
     </section>

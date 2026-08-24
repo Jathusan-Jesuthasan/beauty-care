@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { serviceIntents } from '../data/services'
 import { SectionHeading } from '@/components/ui/section-heading'
@@ -62,21 +63,31 @@ export function IntentFinder() {
         </div>
 
         {/* Selected service detail panel */}
-        <div className="intent-result" role="tabpanel">
-          <span className="intent-number">
-            {String(selectedIndex + 1).padStart(2, '0')}
-          </span>
-          <h3>{selectedIntent.label}</h3>
-          <p>{selectedIntent.description}</p>
-          <ul>
-            {selectedIntent.services.map((service) => (
-              <li key={service}>{service}</li>
-            ))}
-          </ul>
-          <a className="text-link" href={selectedIntent.target}>
-            {selectedIntent.cta} <ArrowUpRight size={15} />
-          </a>
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={selectedIntent.id}
+            className="intent-result"
+            role="tabpanel"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="intent-number">
+              {String(selectedIndex + 1).padStart(2, '0')}
+            </span>
+            <h3>{selectedIntent.label}</h3>
+            <p>{selectedIntent.description}</p>
+            <ul>
+              {selectedIntent.services.map((service) => (
+                <li key={service}>{service}</li>
+              ))}
+            </ul>
+            <a className="text-link" href={selectedIntent.target}>
+              {selectedIntent.cta} <ArrowUpRight size={15} />
+            </a>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   )
