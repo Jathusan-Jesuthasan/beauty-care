@@ -1,3 +1,36 @@
+/**
+ * @file cinematic-scroll.tsx
+ *
+ * @status UNUSED — Not currently imported by any page or component.
+ * @classification Potential legacy / intended feature (Class B).
+ *
+ * @description
+ * GSAP + ScrollTrigger cinematic parallax animations intended for the homepage.
+ * Designed to provide a premium parallax scroll experience across the hero,
+ * bridal, gallery, and contact sections.
+ *
+ * @warning SELECTOR MISMATCH — Hero animation is broken:
+ * This component targets `.hero-visual` for the hero parallax animation,
+ * but the current homepage markup uses `.hero-image` for that element.
+ * As a result, the hero parallax has never fired in production.
+ *
+ * Other targets do match the current DOM:
+ *   - `.bridal-image` ✓
+ *   - `.bridal-copy`  ✓
+ *   - `.gallery-item` ✓
+ *   - `.contact`      ✓
+ *
+ * @howToActivate
+ * To wire up these animations on the homepage:
+ * 1. Import `CinematicScroll` in `app/page.tsx`
+ * 2. Wrap `<main>` with `<CinematicScroll>...</CinematicScroll>`
+ * 3. Fix the `.hero-visual` reference: change it to `.hero-image`
+ *    to match the actual hero section markup.
+ *
+ * @see components/beautiful-transformations.tsx for the related GSAP
+ *      floating-card transformation animation.
+ */
+
 'use client'
 
 import { useLayoutEffect, useRef } from 'react'

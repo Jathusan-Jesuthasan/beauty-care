@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export const DEFAULT_LOADER_DURATION = 1000
 
-const STORAGE_KEY = 'hamsh-beauty-loader-seen'
+const STORAGE_KEY = 'dees-beauty-loader-seen'
 
 interface FirstVisitLoaderProps {
   onComplete?: () => void
@@ -71,7 +71,7 @@ export function FirstVisitLoader({ onComplete }: FirstVisitLoaderProps) {
           initial={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.65, ease: [0.77, 0, 0.175, 1] }}
-          aria-label="Hamsh Beauty Care is loading"
+          aria-label="Dee's Hair, Beauty & Bridal Salon is loading"
         >
           <div className="loader-content">
             {/* Monogram emblem */}
@@ -86,7 +86,7 @@ export function FirstVisitLoader({ onComplete }: FirstVisitLoaderProps) {
                 animate={{ rotate: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.18, ease: 'easeOut' }}
               >
-                H
+                D
               </motion.span>
             </motion.div>
 
@@ -97,14 +97,14 @@ export function FirstVisitLoader({ onComplete }: FirstVisitLoaderProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h2 className="loader-brand-name">Hamsh</h2>
+              <h2 className="loader-brand-name">Dee&apos;s</h2>
               <motion.small
                 className="loader-brand-sub"
                 initial={{ letterSpacing: '0.1em', opacity: 0 }}
                 animate={{ letterSpacing: '0.28em', opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.44, ease: 'easeOut' }}
               >
-                BEAUTY CARE
+                HAIR · BEAUTY · BRIDAL
               </motion.small>
             </motion.div>
 
@@ -127,11 +127,11 @@ export function FirstVisitLoader({ onComplete }: FirstVisitLoaderProps) {
         >
           <div className="loader-content" style={{ opacity: 0.6 }}>
             <div className="loader-monogram">
-              <span>H</span>
+              <span>D</span>
             </div>
             <div className="loader-text">
-              <h2 className="loader-brand-name">Hamsh</h2>
-              <small className="loader-brand-sub">BEAUTY CARE</small>
+              <h2 className="loader-brand-name">Dee&apos;s</h2>
+              <small className="loader-brand-sub">HAIR · BEAUTY · BRIDAL</small>
             </div>
           </div>
         </motion.div>

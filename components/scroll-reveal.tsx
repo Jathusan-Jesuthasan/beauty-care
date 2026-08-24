@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { motion, Variants } from 'framer-motion'
+import { motion, Variants, useReducedMotion } from 'framer-motion'
 
 const defaultEase = [0.22, 1, 0.36, 1] as const
 
@@ -28,7 +28,19 @@ export function ScrollReveal({
   amount = 0.18,
   style,
 }: ScrollRevealProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   const getVariants = (): Variants => {
+    if (shouldReduceMotion) {
+      return {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: { duration, delay },
+        },
+      }
+    }
+    
     switch (variant) {
       case 'scale':
         return {
@@ -141,7 +153,12 @@ export function StaggerItem({
   duration = 0.6,
   className = '',
 }: StaggerItemProps) {
-  const itemVariants: Variants = {
+  const shouldReduceMotion = useReducedMotion()
+
+  const itemVariants: Variants = shouldReduceMotion ? {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration } }
+  } : {
     hidden: {
       opacity: 0,
       y: variant === 'fade-up' ? distance : 0,
@@ -180,14 +197,15 @@ export function MaskedHeading({
   duration = 0.75,
 }: MaskedHeadingProps) {
   const Component = motion[as] as any
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <Component className={`masked-heading-wrapper ${className}`}>
       <span className="masked-heading-line">
         <motion.span
           className="masked-heading-inner"
-          initial={{ y: '105%' }}
-          whileInView={{ y: 0 }}
+          initial={{ y: shouldReduceMotion ? 0 : '105%', opacity: shouldReduceMotion ? 0 : 1 }}
+          whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration, delay, ease: defaultEase }}
         >
@@ -211,18 +229,20 @@ export function ImageReveal({
   withOverlay = false,
   delay = 0,
 }: ImageRevealProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <div className={`image-reveal-wrapper ${className}`}>
       <motion.div
         className="image-reveal-inner"
-        initial={{ opacity: 0, scale: 1.06 }}
+        initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.06 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.85, delay, ease: defaultEase }}
       >
         {children}
       </motion.div>
-      {withOverlay && (
+      {withOverlay && !shouldReduceMotion && (
         <motion.div
           className="image-reveal-overlay"
           initial={{ scaleX: 1 }}

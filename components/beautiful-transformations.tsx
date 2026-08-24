@@ -1,3 +1,37 @@
+/**
+ * @file beautiful-transformations.tsx
+ *
+ * @status UNUSED — Not currently imported by any page or component.
+ * @classification Potential legacy / intended feature (Class B).
+ *
+ * @description
+ * A sophisticated GSAP + ScrollTrigger animation that presents two floating
+ * photo cards in a pinned section as the user scrolls. The cards animate in
+ * from the centre, separate with 3D rotation, reach a depth climax, then
+ * exit. Fully responsive with separate mobile and desktop timelines.
+ *
+ * Provides an alternative visual treatment for a transformations section —
+ * more cinematic than the current `BeforeAfterSlider` approach.
+ *
+ * This component renders a `<section id="transformations">` element.
+ * The active transformation section (`TransformationSection`) also uses
+ * `id="transformations"`. Both cannot be rendered simultaneously without
+ * an ID conflict. Decide which to use before activating.
+ *
+ * Includes a graceful `prefers-reduced-motion` fallback that renders a
+ * static two-card grid without any animation.
+ *
+ * @howToActivate
+ * 1. Replace `<TransformationSection />` in `app/page.tsx` with
+ *    `<BeautifulTransformations />` (import from this file).
+ * 2. Supply the salon's own before/after image URLs via the
+ *    `imageOne` and `imageTwo` props.
+ * 3. Verify that `.transformation-container` CSS exists in globals.css.
+ *    If not, add the required styles from this component's expected CSS.
+ *
+ * @see components/cinematic-scroll.tsx for the related hero/gallery GSAP animations.
+ */
+
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
@@ -426,20 +460,20 @@ export function BeautifulTransformations({
     return (
       <section id="transformations" className="transformations-container static-mode">
         <div className="transformations-intro">
-          <span className="eyebrow">The Hamsh touch</span>
+          <span className="eyebrow">The Dee&apos;s touch</span>
           <h2>Beautiful transformations</h2>
           <p>Every look is created to complement your natural beauty — never hide it.</p>
         </div>
         <div className="transformations-static-grid">
           <div className="floating-card">
             <div className="floating-card-inner">
-              <img src={imageOne} alt="Hamsh Beauty Care natural look" />
+              <img src={imageOne} alt="Dee's Hair, Beauty & Bridal Salon natural look" />
             </div>
             <span className="floating-card-badge">Natural</span>
           </div>
           <div className="floating-card">
             <div className="floating-card-inner">
-              <img src={imageTwo} alt="Hamsh Beauty Care radiant finish" />
+              <img src={imageTwo} alt="Dee's Hair, Beauty & Bridal Salon radiant finish" />
             </div>
             <span className="floating-card-badge">Radiant</span>
           </div>
@@ -456,7 +490,7 @@ export function BeautifulTransformations({
       aria-label="Beautiful Transformations"
     >
       <div className="transformations-intro">
-        <span className="eyebrow">The Hamsh touch</span>
+        <span className="eyebrow">The Dee&apos;s touch</span>
         <h2>Beautiful transformations</h2>
         <p>Every look is created to complement your natural beauty — never hide it.</p>
       </div>
@@ -484,7 +518,7 @@ export function BeautifulTransformations({
                 <img
                   ref={imgOneRef}
                   src={imageOne}
-                  alt="Hamsh Beauty Care natural transformation"
+                  alt="Dee's Hair, Beauty & Bridal Salon natural transformation"
                   loading="lazy"
                 />
               </div>
@@ -502,7 +536,7 @@ export function BeautifulTransformations({
                 <img
                   ref={imgTwoRef}
                   src={imageTwo}
-                  alt="Hamsh Beauty Care radiant transformation"
+                  alt="Dee's Hair, Beauty & Bridal Salon radiant transformation"
                   loading="lazy"
                 />
               </div>

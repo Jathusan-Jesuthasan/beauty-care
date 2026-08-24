@@ -1,4 +1,4 @@
-# hamsh-beauty-care
+# Dee's Hair, Beauty & Bridal Salon
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
 
