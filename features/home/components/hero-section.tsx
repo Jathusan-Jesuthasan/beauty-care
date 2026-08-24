@@ -33,9 +33,23 @@ const HERO_SLIDES = [
   },
 ] as const
 
+interface HeroBurst {
+  id: number
+  x: number
+  y: number
+  particles: Array<{
+    id: number
+    x: number
+    y: number
+    size: number
+  }>
+}
+
 export function HeroSection() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [heroBursts, setHeroBursts] = useState<HeroBurst[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const heroRef = useRef<HTMLElement>(null)
   const shouldReduceMotion = useReducedMotion()
@@ -56,8 +70,16 @@ export function HeroSection() {
   const heroImageScale = useTransform(
     scrollYProgress,
     [0, 0.75],
-    [1, shouldReduceMotion ? 1 : 1.03],
+    [1, shouldReduceMotion ? 1 : isMobile ? 1.015 : 1.03],
   )
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 760px)')
+    const update = () => setIsMobile(mediaQuery.matches)
+    update()
+    mediaQuery.addEventListener('change', update)
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
 
   // ── Seamless Auto-rotating Editorial Carousel (5.5s autoplay) ───────────
   useEffect(() => {
@@ -74,8 +96,55 @@ export function HeroSection() {
 
   const activeSlide = HERO_SLIDES[currentSlideIndex]
 
+  const handleHeroClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (shouldReduceMotion) return
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const burstId = Date.now()
+    const particles = Array.from({ length: 6 }, (_, index) => {
+      const angle = (Math.PI * 2 * index) / 6 + (Math.random() - 0.5) * 0.35
+      const distance = 34 + Math.random() * 30
+
+      return {
+        id: index,
+        x: Math.cos(angle) * distance,
+        y: Math.sin(angle) * distance,
+        size: 3 + Math.round(Math.random() * 3),
+      }
+    })
+
+    setHeroBursts((bursts) => [...bursts.slice(-2), { id: burstId, x: event.clientX - bounds.left, y: event.clientY - bounds.top, particles }])
+    window.setTimeout(() => {
+      setHeroBursts((bursts) => bursts.filter((burst) => burst.id !== burstId))
+    }, 720)
+  }
+
   return (
-    <motion.section ref={heroRef} id="home" className="hero">
+    <motion.section ref={heroRef} id="home" className="hero" onClick={handleHeroClick}>
+      <div className="hero-click-bursts" aria-hidden="true">
+        {heroBursts.map((burst) => (
+          <motion.span
+            className="hero-click-burst"
+            key={burst.id}
+            style={{ left: burst.x, top: burst.y }}
+            initial={{ opacity: 0.85, scale: 0.2 }}
+            animate={{ opacity: 0, scale: 1.8 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="hero-click-ring" />
+            {burst.particles.map((particle) => (
+              <motion.span
+                className="hero-click-particle"
+                key={particle.id}
+                style={{ width: particle.size, height: particle.size }}
+                initial={{ opacity: 1, x: 0, y: 0, scale: 0.6 }}
+                animate={{ opacity: 0, x: particle.x, y: particle.y, scale: 1 }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              />
+            ))}
+          </motion.span>
+        ))}
+      </div>
       {/* Left Copy Panel */}
       <motion.div className="hero-copy" style={{ y: heroCopyY, opacity: heroCopyOpacity }}>
         <ScrollReveal>

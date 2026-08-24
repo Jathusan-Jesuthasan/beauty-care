@@ -1,9 +1,23 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion, Variants, useReducedMotion } from 'framer-motion'
 
 const defaultEase = [0.22, 1, 0.36, 1] as const
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 760px)')
+    const update = () => setIsMobile(mediaQuery.matches)
+    update()
+    mediaQuery.addEventListener('change', update)
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
+
+  return isMobile
+}
 
 export type RevealVariant = 'fade-up' | 'scale' | 'left' | 'right'
 
@@ -29,6 +43,9 @@ export function ScrollReveal({
   style,
 }: ScrollRevealProps) {
   const shouldReduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
+  const revealDistance = isMobile ? Math.min(distance, 16) : distance
+  const revealDuration = isMobile ? Math.min(duration, 0.52) : duration
 
   const getVariants = (): Variants => {
     if (shouldReduceMotion) {
@@ -36,7 +53,7 @@ export function ScrollReveal({
         hidden: { opacity: 0 },
         visible: {
           opacity: 1,
-          transition: { duration, delay },
+          transition: { duration: revealDuration, delay },
         },
       }
     }
@@ -48,36 +65,36 @@ export function ScrollReveal({
           visible: {
             opacity: 1,
             scale: 1,
-            transition: { duration, delay, ease: defaultEase },
+            transition: { duration: revealDuration, delay, ease: defaultEase },
           },
         }
       case 'left':
         return {
-          hidden: { opacity: 0, x: -distance },
+          hidden: { opacity: 0, x: -revealDistance },
           visible: {
             opacity: 1,
             x: 0,
-            transition: { duration, delay, ease: defaultEase },
+            transition: { duration: revealDuration, delay, ease: defaultEase },
           },
         }
       case 'right':
         return {
-          hidden: { opacity: 0, x: distance },
+          hidden: { opacity: 0, x: revealDistance },
           visible: {
             opacity: 1,
             x: 0,
-            transition: { duration, delay, ease: defaultEase },
+            transition: { duration: revealDuration, delay, ease: defaultEase },
           },
         }
       case 'fade-up':
       default:
         return {
-          hidden: { opacity: 0, y: distance, scale: 0.985 },
+          hidden: { opacity: 0, y: revealDistance, scale: 0.985 },
           visible: {
             opacity: 1,
             y: 0,
             scale: 1,
-            transition: { duration, delay, ease: defaultEase },
+            transition: { duration: revealDuration, delay, ease: defaultEase },
           },
         }
     }
@@ -85,6 +102,7 @@ export function ScrollReveal({
 
   return (
     <motion.div
+      suppressHydrationWarning
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount }}
@@ -126,6 +144,7 @@ export function StaggerGroup({
 
   return (
     <motion.div
+      suppressHydrationWarning
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount }}
@@ -154,15 +173,18 @@ export function StaggerItem({
   className = '',
 }: StaggerItemProps) {
   const shouldReduceMotion = useReducedMotion()
+  const isMobile = useIsMobile()
+  const revealDistance = isMobile ? Math.min(distance, 16) : distance
+  const revealDuration = isMobile ? Math.min(duration, 0.52) : duration
 
   const itemVariants: Variants = shouldReduceMotion ? {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration } }
+    visible: { opacity: 1, transition: { duration: revealDuration } }
   } : {
     hidden: {
       opacity: 0,
-      y: variant === 'fade-up' ? distance : 0,
-      x: variant === 'left' ? -distance : variant === 'right' ? distance : 0,
+      y: variant === 'fade-up' ? revealDistance : 0,
+      x: variant === 'left' ? -revealDistance : variant === 'right' ? revealDistance : 0,
       scale: variant === 'scale' ? 0.96 : 0.985,
     },
     visible: {
@@ -170,12 +192,12 @@ export function StaggerItem({
       y: 0,
       x: 0,
       scale: 1,
-      transition: { duration, ease: defaultEase },
+      transition: { duration: revealDuration, ease: defaultEase },
     },
   }
 
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <motion.div suppressHydrationWarning variants={itemVariants} className={className}>
       {children}
     </motion.div>
   )
@@ -200,9 +222,10 @@ export function MaskedHeading({
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <Component className={`masked-heading-wrapper ${className}`}>
+    <Component suppressHydrationWarning className={`masked-heading-wrapper ${className}`}>
       <span className="masked-heading-line">
         <motion.span
+          suppressHydrationWarning
           className="masked-heading-inner"
           initial={{ y: shouldReduceMotion ? 0 : '105%', opacity: shouldReduceMotion ? 0 : 1 }}
           whileInView={{ y: 0, opacity: 1 }}
@@ -234,6 +257,7 @@ export function ImageReveal({
   return (
     <div className={`image-reveal-wrapper ${className}`}>
       <motion.div
+        suppressHydrationWarning
         className="image-reveal-inner"
         initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.06 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -244,7 +268,8 @@ export function ImageReveal({
       </motion.div>
       {withOverlay && !shouldReduceMotion && (
         <motion.div
-          className="image-reveal-overlay"
+            className="image-reveal-overlay"
+            suppressHydrationWarning
           initial={{ scaleX: 1 }}
           whileInView={{ scaleX: 0 }}
           viewport={{ once: true, amount: 0.2 }}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { StaggerGroup, StaggerItem, ScrollReveal } from '@/components/scroll-reveal'
 import { ArrowUpRight, MapPin, Phone } from 'lucide-react'
 import { locations } from '../data/locations'
 import { formatOpeningHours, getOpeningStatus } from '../utils/opening-status'
@@ -121,7 +122,7 @@ export function BranchFinder() {
 
       <div className="branch-layout">
         {/* Location selector cards */}
-        <div className="branch-cards">
+        <StaggerGroup className="branch-cards" stagger={0.06} delay={0.04}>
           {verifiedLocations.map((location) => {
             const locationStatus = getOpeningStatus(location.openingHours)
             const isSelected = location.id === selectedLocation.id
@@ -129,31 +130,33 @@ export function BranchFinder() {
               locationStatus.label === 'Open now' ? 'open' : 'pending'
 
             return (
-              <button
-                key={location.id}
-                className={`branch-card ${isSelected ? 'active' : ''}`}
-                onClick={() => setSelectedId(location.id)}
-                aria-pressed={isSelected}
-              >
-                <span className="branch-card-number">
-                  {location.featured ? 'Featured' : "Dee's"}
-                </span>
-                <h3>{getShortLocationName(location.name)}</h3>
-                <p>{location.address}</p>
-                <span className={`status status-${statusModifier}`}>
-                  {locationStatus.label}
-                  {locationStatus.closesAt &&
-                    ` · Closes at ${locationStatus.closesAt}`}
-                  {!locationStatus.closesAt &&
-                    locationStatus.opensAt &&
-                    ` · Opens at ${locationStatus.opensAt}`}
-                </span>
-              </button>
+              <StaggerItem key={location.id}>
+                <button
+                  className={`branch-card ${isSelected ? 'active' : ''}`}
+                  onClick={() => setSelectedId(location.id)}
+                  aria-pressed={isSelected}
+                >
+                  <span className="branch-card-number">
+                    {location.featured ? 'Featured' : "Dee's"}
+                  </span>
+                  <h3>{getShortLocationName(location.name)}</h3>
+                  <p>{location.address}</p>
+                  <span className={`status status-${statusModifier}`}>
+                    {locationStatus.label}
+                    {locationStatus.closesAt &&
+                      ` · Closes at ${locationStatus.closesAt}`}
+                    {!locationStatus.closesAt &&
+                      locationStatus.opensAt &&
+                      ` · Opens at ${locationStatus.opensAt}`}
+                  </span>
+                </button>
+              </StaggerItem>
             )
           })}
-        </div>
+        </StaggerGroup>
 
         {/* Selected location detail panel */}
+        <ScrollReveal className="branch-detail-reveal" variant="fade-up" delay={0.12}>
         <div className="branch-detail">
           {/* Static location visual without third-party embed scripts */}
           <div
@@ -241,6 +244,7 @@ export function BranchFinder() {
             </div>
           </div>
         </div>
+        </ScrollReveal>
       </div>
     </section>
   )

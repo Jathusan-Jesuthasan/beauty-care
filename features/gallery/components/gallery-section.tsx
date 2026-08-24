@@ -120,11 +120,19 @@ export function GallerySection() {
       </div>
 
       {/* Gallery grid */}
-      <div className="gallery-grid">
+      <motion.div
+        key={filter}
+        className="gallery-grid"
+        suppressHydrationWarning
+        initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.99 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: shouldReduceMotion ? 0.01 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+      >
         {filtered.map(([category, src, altText], index) => (
           <motion.button
             layout
             key={src}
+            suppressHydrationWarning
             className="gallery-item"
             style={{ position: 'relative' }}
             initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.04 }}
@@ -146,7 +154,7 @@ export function GallerySection() {
             </span>
           </motion.button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Full-screen Lightbox Modal */}
       <AnimatePresence>
